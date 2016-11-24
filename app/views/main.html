@@ -3,16 +3,25 @@
 <input type="search" ng-model="q" placeholder="filter films..." aria-label="filter films" />
 <div>
   <video id="video1" width="100%" height="250" controls>
-    <source ng-repeat="stream in streams" ng-change="new()" ng-src="{{stream.url}}" ng-type="video/{{stream.type}}">
+    <source ng-model="streams" ng-repeat="stream in streams" ng-src="{{stream.url}}" ng-type="video/{{stream.type}}">
 <!-- todo $sce.getTrustedResourceUrl(value) передает новый url-->
   </video>
-  {{streams[0].url}}
+  <h3> {{title}} ({{meta.releaseYear}})</h3>
+  <p> Directors: {{meta.directors[0].name}}</p>
+
+    <ul>
+      <lh>Actors:</lh>
+      <li ng-repeat="actor in meta.actors" >{{actor.name}}, </li>
+    </ul>
+  </p>
+
+
 </div>
 
 <div class=" row example-animate-container">
   <div class="col-lg-3 col-md-3 animate-repeat" ng-repeat=" film in data | filter:q as results">
 
-    <a ng-click="SelectFilms(film.streams)" href="">
+    <a ng-click="SelectFilms(film)" href="">
       <img class="image-placeholder" ng-src="../images/{{film.images.cover}}">
     </a>
     <h5> {{film.title}}</h5>

@@ -59,7 +59,7 @@ body {
   margin-top: 28px;
 }
 ul{
-  display: inline;
+  display: block;
 }
 ul li{
   list-style: none;
