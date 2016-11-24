@@ -15,6 +15,8 @@ angular.module('testApp')
         $scope.title = data[0].title;
         $scope.meta = data[0].meta;
         $scope.description = data[0].description;
+        $scope.placeholder = data[0].images.placeholder;
+
       });
 
     $scope.SelectFilms = function (data) {
@@ -22,6 +24,7 @@ angular.module('testApp')
       $scope.title = data.title;
       $scope.meta = data.meta;
       $scope.description = data.description;
+      $scope.placeholder = data.images.placeholder;
     };
 
     $scope.$watch('streams', function (e) {
