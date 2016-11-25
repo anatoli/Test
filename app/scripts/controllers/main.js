@@ -29,9 +29,11 @@ angular.module('testApp')
 
     $scope.$watch('streams', function (e) {
        console.log(e);
-      document.getElementById('video1').load(function () {
+        document.getElementById('video1').load(function () {
         document.getElementById('video1').play()
       });
+
+
 
     });
   }]);

@@ -9,6 +9,23 @@
     <source ng-model="streams" ng-repeat="stream in streams" ng-src="{{stream.url}}" ng-type="video/{{stream.type}}">
 <!-- todo $sce.getTrustedResourceUrl(value) передает новый url-->
   </video>
+  <div class="controls">
+    <img src="../images/play-icon.png" id="playpause" class="paused" >
+    <!--<div class="progress">-->
+      <!--<div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="50"-->
+           <!--aria-valuemin="0" aria-valuemax="100" style="width:1%">-->
+      <!--</div>-->
+    <!--</div>-->
+    <span id="progress">
+      <span id="total">
+          <span id="buffered"><span id="current">​</span></span>
+      </span>
+    </span>
+    <span id="time">
+      <span id="currenttime">00:00</span> /
+      <span id="duration">00:00</span>
+    </span>
+  </div>
   <h3> {{title}} ({{meta.releaseYear}})</h3>
   <p> Directors: {{meta.directors[0].name}}</p>
 
@@ -34,3 +51,93 @@
     <strong>No results found...</strong>
   </div>
 </div>
+<script>
+  $(document).ready(function(){
+    var controls = {
+      video: $("#video1"),
+      playpause: $("#playpause"),
+      togglePlayback: function() {
+        (video.paused) ? video.play() : video.pause();
+      },
+      total: $("#total"),
+      buffered: $("#buffered"),
+      progress: $("#current"),
+      duration: $("#duration"),
+      currentTime: $("#currenttime"),
+      hasHours: false,
+    };
+
+    var video = controls.video[0];
+
+    controls.playpause.click(function(){
+      controls.togglePlayback();
+    });
+    controls.video.click(function() {
+      controls.togglePlayback();
+    });
+
+    video.addEventListener("ended", function() {
+      video.pause();
+      controls.playpause.addClass('play-img');
+    });
+    video.addEventListener("play", function() {
+      controls.playpause.attr('src','../images/pause-icon.png');
+    });
+
+    video.addEventListener("pause", function() {
+      controls.playpause.attr('src','../images/play-icon.png');
+    });
+
+    video.addEventListener("canplay", function() {
+      controls.playpause.attr('src','../images/play-icon.png');
+      controls.hasHours = (video.duration / 3600) >= 1.0;
+      controls.duration.text(formatTime(video.duration, controls.hasHours));
+      controls.currentTime.text(formatTime(0),controls.hasHours);
+    }, false);
+
+    video.addEventListener("timeupdate", function() {
+      controls.currentTime.text(formatTime(video.currentTime, controls.hasHours));
+
+      var progress = Math.floor(video.currentTime) / Math.floor(video.duration);
+      controls.progress[0].style.width = Math.floor(progress * controls.total.width()) + "px";
+    }, false);
+
+    controls.total.click(function(e) {
+      var x = (e.pageX - this.offsetLeft)/$(this).width();
+      video.currentTime = x * video.duration;
+    });
+
+    video.addEventListener("progress", function() {
+      var buffered = Math.floor(video.buffered.end(0)) / Math.floor(video.duration);
+      controls.buffered[0].style.width =  Math.floor(buffered * controls.total.width()) + "px";
+    }, false);
+
+    function formatTime(time, hours) {
+      if (hours) {
+        var h = Math.floor(time / 3600);
+        time = time - h * 3600;
+
+        var m = Math.floor(time / 60);
+        var s = Math.floor(time % 60);
+
+        return h.lead0(2)  + ":" + m.lead0(2) + ":" + s.lead0(2);
+      } else {
+        var m = Math.floor(time / 60);
+        var s = Math.floor(time % 60);
+
+        return m.lead0(2) + ":" + s.lead0(2);
+      }
+    }
+
+    Number.prototype.lead0 = function(n) {
+      var nz = "" + this;
+      while (nz.length < n) {
+        nz = "0" + nz;
+      }
+      return nz;
+    };
+
+
+  });
+
+</script>
