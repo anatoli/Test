@@ -1,6 +1,6 @@
 # Test
 Before starting
-  `npm install`
+  `npm install`,
   `bower install`
 
 ## Build & development
