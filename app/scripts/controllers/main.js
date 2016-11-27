@@ -1,12 +1,5 @@
 'use strict';
 
-/**
- * @ngdoc function
- * @name testApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of the testApp
- */
 angular.module('testApp')
   .controller('MainCtrl',[ '$scope', '$http', function ($scope, http) {
       http.get('movies.json').success(function (data) {
@@ -28,7 +21,6 @@ angular.module('testApp')
     };
 
     $scope.$watch('streams', function (e) {
-       console.log(e);
         document.getElementById('video1').load(function () {
         document.getElementById('video1').play()
       });
